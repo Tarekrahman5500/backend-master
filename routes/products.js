@@ -3,6 +3,7 @@ const express = require('express');
 const {Category} = require("../models/category");
 const router = express.Router();
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs')
 
 router.get(`/`, async (req, res) => {
     let filter = {};

@@ -5,7 +5,8 @@ const  morgan = require('morgan');
 const mongoose = require('mongoose');
 const port = 3000;
 require('dotenv/config');
-//Routes
+const authjwt = require('./helpers/jwt');
+const errHandler = require('./helpers/error-handler');
 const categoriesRoutes = require('./routes/categories');
 const productsRoutes = require('./routes/products');
 const usersRoutes = require('./routes/users');
@@ -15,6 +16,9 @@ const api = process.env.API_URL;
 //middleware
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
+app.use(authjwt());
+app.use(errHandler);
+
 app.use(`${api}/categories`, categoriesRoutes);
 app.use(`${api}/products`, productsRoutes);
 app.use(`${api}/users`, usersRoutes);
@@ -23,7 +27,8 @@ app.use(`${api}/orders`, ordersRoutes);
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true,
 
 })
     .then(()=>
